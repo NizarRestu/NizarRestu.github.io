@@ -226,7 +226,7 @@
 
   async function scanWithOCR(source) {
     if (!window.Tesseract) {
-      setScanStatus('Memuat OCR untuk membaca teks...', 'warn');
+      setScanStatus('Memuat OCR untuk membaca teks (pertama kali bisa agak lama)...', 'warn');
       const urls = [
         'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
         'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js'
@@ -236,14 +236,17 @@
         try { await loadScript(url); if (window.Tesseract) break; }
         catch (e) { lastErr = e; }
       }
-      if (!window.Tesseract) throw lastErr || new Error('Gagal memuat OCR');
+      if (!window.Tesseract) throw lastErr || new Error('Gagal memuat OCR. Periksa koneksi internet.');
     }
-    const result = await window.Tesseract.recognize(source, 'eng', {
-      tessedit_char_whitelist: '0123456789'
-    });
-    const text = result && result.data ? result.data.text : '';
+    setScanStatus('Membaca teks dari gambar...', 'warn');
+    const result = await window.Tesseract.recognize(source, 'eng');
+    const text = result && result.data ? (result.data.text || '') : '';
     const imeis = extractImeis(text);
-    return imeis[0] || null;
+    if (imeis.length) return imeis[0];
+    // fallback: digits only from raw text (handles spaces/dashes in OCR)
+    const digitsOnly = text.replace(/\D/g, '');
+    const fromDigits = extractImeis(digitsOnly);
+    return fromDigits[0] || null;
   }
 
   async function detectFromSource(source, label) {
@@ -253,18 +256,20 @@
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
 
     try { imei = await scanWithZXing(source); }
-    catch (e) { setScanStatus(`Pemindai barcode gagal (${e && e.message ? e.message : e}). Mencoba baca teks/OCR...`, 'warn'); }
+    catch (e) { console.warn('ZXing scan error', e); /* lanjut ke OCR */ }
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
 
+    setScanStatus('Barcode tidak terdeteksi, mencoba baca teks/OCR...', 'warn');
     try {
       imei = await scanWithOCR(source);
       if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari teks/OCR: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
     } catch (e) {
-      setScanStatus(`Gagal membaca teks/OCR: ${e && e.message ? e.message : e}. Periksa koneksi internet (library scan dimuat dari CDN) lalu coba lagi.`, 'bad');
+      console.error('OCR error', e);
+      setScanStatus(`Gagal membaca teks: ${e && e.message ? e.message : e}. Pastikan internet aktif untuk memuat OCR, lalu coba lagi.`, 'bad');
       return false;
     }
 
-    setScanStatus(`Tidak ditemukan IMEI 15 digit pada ${label}. Pastikan teks/barcode IMEI jelas, terang, dan fokus.`, 'bad');
+    setScanStatus(`Tidak ditemukan angka IMEI 15 digit pada ${label}. Coba foto lebih dekat, terang, dan fokus pada teks IMEI.`, 'bad');
     return false;
   }
 

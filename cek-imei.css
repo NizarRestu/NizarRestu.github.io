@@ -278,31 +278,46 @@ input[type="text"]:focus { outline: 2px solid rgba(56,189,248,0.35); border-colo
   .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
-  .header-inner { flex-wrap: wrap; padding: .6rem 0; }
-  .menu-toggle { display: inline-block; margin-left: auto; }
+  .header-inner { padding: .6rem 0; min-height: 60px; }
+  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; z-index: 30; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .menu-toggle span { transition: transform .2s, opacity .2s; transform-origin: center; }
   .top-nav {
     display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: .25rem;
+    gap: .15rem;
     padding: .75rem;
     background: rgba(15,23,42,0.98);
     border: 1px solid var(--border);
     border-radius: 12px;
+    box-shadow: var(--shadow);
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    z-index: 25;
   }
   .top-nav.open { display: flex; }
-  .top-nav a { padding: .45rem .25rem; }
+  .top-nav > a { padding: .6rem .5rem; border-radius: 8px; }
+  .top-nav > a:hover { background: rgba(56,189,248,0.08); }
+  .nav-layanan { padding-bottom: .2rem; }
   .nav-submenu {
     display: grid;
-    gap: .15rem;
+    grid-template-columns: 1fr;
+    gap: 0;
     padding: .25rem 0 .5rem .75rem;
     border-left: 2px solid rgba(56,189,248,0.25);
-    margin: .1rem 0 .25rem;
+    margin: 0 0 .25rem .25rem;
   }
-  .nav-submenu a { font-size: .9rem; padding: .3rem 0; }
+  .nav-submenu a { font-size: .9rem; padding: .45rem .5rem; border-radius: 8px; display: block; }
+  .nav-submenu a:hover { background: rgba(56,189,248,0.08); }
   .services-grid, .guide-grid { grid-template-columns: 1fr; }
   .input-row { grid-template-columns: 1fr; }
-  .btn-secondary { width: 100%; }
+  .scan-actions .btn, .scan-file-label { width: 100%; justify-content: center; }
   .hero { padding-top: 2.2rem; }
 }
