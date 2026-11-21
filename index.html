@@ -51,10 +51,11 @@
             <p class="field-label scan-label">Scan Barcode / Teks IMEI</p>
             <div class="scan-actions">
               <button type="button" id="scan-camera-btn" class="btn btn-secondary">Buka Kamera</button>
-              <button type="button" id="scan-image-btn" class="btn btn-secondary">Upload Gambar</button>
+              <label for="scan-file-input" class="btn btn-secondary scan-file-label">Upload Gambar</label>
               <button type="button" id="scan-stop-btn" class="btn btn-ghost" hidden>Hentikan</button>
-              <input id="scan-file-input" type="file" accept="image/*" hidden>
+              <input id="scan-file-input" type="file" accept="image/*" class="visually-hidden">
             </div>
+            <p class="help-text scan-help">Kamera butuh izin browser dan biasanya harus dibuka lewat <code>localhost</code>/HTTPS (bukan file langsung). Upload gambar bisa dipakai sebagai alternatif.</p>
             <div id="scan-area" class="scan-area" hidden>
               <video id="scan-video" class="scan-video" autoplay playsinline muted></video>
               <canvas id="scan-canvas" class="scan-canvas" hidden></canvas>
