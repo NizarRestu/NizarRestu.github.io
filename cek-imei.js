@@ -116,6 +116,7 @@
     if (!cameraModal) return;
     cameraModal.hidden = false;
     cameraModal.removeAttribute('hidden');
+    cameraModal.classList.add('show');
     cameraModal.style.display = 'flex';
     cameraModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -125,6 +126,7 @@
     if (!cameraModal) return;
     cameraModal.hidden = true;
     cameraModal.setAttribute('hidden', '');
+    cameraModal.classList.remove('show');
     cameraModal.style.display = 'none';
     cameraModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';

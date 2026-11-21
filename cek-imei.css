@@ -205,13 +205,14 @@ input[type="text"]:focus { outline: 2px solid rgba(56,189,248,0.35); border-colo
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(0,0,0,.8);
 }
-.scan-area[hidden], .scan-canvas[hidden], .camera-modal[hidden] { display: none !important; }
+.scan-area[hidden], .scan-canvas[hidden] { display: none !important; }
 
 .camera-modal {
   position: fixed; inset: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: center;
+  display: none; align-items: center; justify-content: center;
   padding: 1rem;
 }
+.camera-modal.show { display: flex; }
 .camera-modal-backdrop {
   position: absolute; inset: 0;
   background: rgba(2, 6, 23, 0.72);
