@@ -13,6 +13,10 @@
   const scanVideo = document.getElementById('scan-video');
   const scanCanvas = document.getElementById('scan-canvas');
   const scanStatus = document.getElementById('scan-status');
+  const cameraModal = document.getElementById('camera-modal');
+  const cameraBackdrop = document.getElementById('camera-backdrop');
+  const cameraCloseBtn = document.getElementById('camera-close-btn');
+  const cameraModalStatus = document.getElementById('camera-modal-status');
   const menuToggle = document.getElementById('menu-toggle');
   const siteNav = document.getElementById('site-nav');
 
@@ -102,9 +106,24 @@
   }
 
   function setScanStatus(msg, cls) {
-    if (!scanStatus) return;
-    scanStatus.textContent = msg;
-    scanStatus.className = 'status' + (cls ? ' ' + cls : '');
+    const text = msg || '';
+    const className = 'status' + (cls ? ' ' + cls : '');
+    if (scanStatus) { scanStatus.textContent = text; scanStatus.className = className; }
+    if (cameraModalStatus) { cameraModalStatus.textContent = text; cameraModalStatus.className = className; }
+  }
+
+  function openCameraModal() {
+    if (!cameraModal) return;
+    cameraModal.hidden = false;
+    cameraModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCameraModal() {
+    if (!cameraModal) return;
+    cameraModal.hidden = true;
+    cameraModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
 
   function extractImeis(text) {
@@ -138,7 +157,7 @@
   let scanning = false;
   let zxingReader = null;
 
-  function stopScan() {
+  function stopScan(closeModal) {
     scanning = false;
     if (scanTimer) { clearTimeout(scanTimer); scanTimer = null; }
     if (scanStream) {
@@ -147,9 +166,8 @@
     }
     if (scanVideo) scanVideo.srcObject = null;
     if (scanArea) scanArea.hidden = true;
-    if (scanStopBtn) scanStopBtn.hidden = true;
-    if (scanCaptureBtn) scanCaptureBtn.hidden = true;
     if (scanCameraBtn) scanCameraBtn.disabled = false;
+    if (closeModal) closeCameraModal();
   }
 
   function loadScript(src) {
@@ -282,19 +300,28 @@
     scanCanvas.height = scanVideo.videoHeight || 720;
     const ctx = scanCanvas.getContext('2d');
     ctx.drawImage(scanVideo, 0, 0, scanCanvas.width, scanCanvas.height);
-    await detectFromSource(scanCanvas, 'foto kamera (teks/barcode)');
+    scanning = false;
+    if (scanTimer) { clearTimeout(scanTimer); scanTimer = null; }
+    const found = await detectFromSource(scanCanvas, 'foto kamera');
+    if (found) {
+      stopScan(true);
+    } else {
+      scanning = true;
+      setScanStatus('IMEI belum terbaca. Coba arahkan lebih dekat/terang, lalu tekan Ambil Gambar & Scan lagi.', 'warn');
+    }
   }
 
   async function startCameraScan() {
     if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-      setScanStatus('Kamera butuh konteks aman (HTTPS atau localhost). Buka halaman lewat server lokal, atau gunakan Upload Gambar.', 'bad');
+      setScanStatus('Kamera butuh HTTPS/localhost. Buka situs lewat HTTPS atau gunakan Upload Gambar.', 'bad');
       return;
     }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setScanStatus('Browser tidak mendukung akses kamera. Gunakan Upload Gambar.', 'bad');
       return;
     }
-    stopScan();
+    stopScan(false);
+    openCameraModal();
     setScanStatus('Meminta izin kamera...', 'warn');
     try {
       scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
@@ -304,25 +331,23 @@
       } catch (err) {
         const name = err && err.name ? err.name : '';
         if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
-          setScanStatus('Izin kamera ditolak. Izinkan akses kamera di browser, lalu coba lagi, atau gunakan Upload Gambar.', 'bad');
+          setScanStatus('Izin kamera ditolak. Izinkan kamera di pengaturan browser, lalu coba lagi.', 'bad');
         } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
-          setScanStatus('Kamera tidak ditemukan. Pastikan perangkat memiliki kamera, atau gunakan Upload Gambar.', 'bad');
+          setScanStatus('Kamera tidak ditemukan. Gunakan Upload / Foto IMEI.', 'bad');
         } else if (name === 'NotReadableError') {
           setScanStatus('Kamera sedang dipakai aplikasi lain. Tutup aplikasi tersebut lalu coba lagi.', 'bad');
         } else {
-          setScanStatus(`Gagal mengakses kamera (${name || 'error'}). Coba Upload Gambar.`, 'bad');
+          setScanStatus(`Gagal mengakses kamera (${name || 'error'}). Coba Upload / Foto IMEI.`, 'bad');
         }
         return;
       }
     }
     scanArea.hidden = false;
-    scanStopBtn.hidden = false;
-    if (scanCaptureBtn) scanCaptureBtn.hidden = false;
     scanCameraBtn.disabled = true;
     scanVideo.srcObject = scanStream;
     try { await scanVideo.play(); } catch (_) {}
     scanning = true;
-    setScanStatus('Kamera aktif. Arahkan ke barcode/teks IMEI, atau tekan "Ambil Foto & Scan Teks" untuk OCR seperti Google Lens.', 'warn');
+    setScanStatus('Kamera aktif. Arahkan ke IMEI/barcode, lalu tekan "Ambil Gambar & Scan".', 'warn');
 
     const tick = async () => {
       if (!scanning) return;
@@ -390,8 +415,17 @@
     scanCaptureBtn.addEventListener('click', (e) => { e.preventDefault(); captureAndScan(); });
   }
   if (scanStopBtn) {
-    scanStopBtn.addEventListener('click', (e) => { e.preventDefault(); stopScan(); setScanStatus('Pemindaian kamera dihentikan.', 'warn'); });
+    scanStopBtn.addEventListener('click', (e) => { e.preventDefault(); stopScan(true); setScanStatus('Kamera ditutup.', 'warn'); });
   }
+  if (cameraCloseBtn) {
+    cameraCloseBtn.addEventListener('click', (e) => { e.preventDefault(); stopScan(true); });
+  }
+  if (cameraBackdrop) {
+    cameraBackdrop.addEventListener('click', () => { stopScan(true); });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cameraModal && !cameraModal.hidden) stopScan(true);
+  });
   if (scanFileInput) {
     scanFileInput.addEventListener('change', (e) => {
       const f = e.target.files && e.target.files[0];

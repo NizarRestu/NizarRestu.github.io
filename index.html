@@ -62,22 +62,15 @@
           <div id="imei-status" class="status" role="status" aria-live="polite"></div>
 
           <div class="scan-block">
-            <p class="field-label scan-label">Scan Barcode / Teks IMEI (seperti Google Lens)</p>
+            <p class="field-label scan-label">Scan Barcode / Teks IMEI</p>
             <div class="scan-actions">
               <button type="button" id="scan-camera-btn" class="btn btn-secondary">Buka Kamera</button>
-              <button type="button" id="scan-capture-btn" class="btn btn-secondary" hidden>Ambil Foto &amp; Scan Teks</button>
               <label class="btn btn-secondary scan-file-label" id="scan-image-label">
                 Upload / Foto IMEI
                 <input id="scan-file-input" type="file" accept="image/*" class="scan-file-input">
               </label>
-              <button type="button" id="scan-stop-btn" class="btn btn-ghost" hidden>Hentikan</button>
             </div>
-            <p class="help-text scan-help">Bisa scan <strong>barcode</strong> atau <strong>teks angka IMEI</strong> langsung dari kamera/foto (OCR). Di HP, izinkan kamera saat diminta. Saat scan pertama perlu koneksi internet untuk memuat library pemindai.</p>
-            <div id="scan-area" class="scan-area" hidden>
-              <video id="scan-video" class="scan-video" autoplay playsinline muted></video>
-              <canvas id="scan-canvas" class="scan-canvas" hidden></canvas>
-              <div class="scan-overlay"><div class="scan-frame"><span class="scan-frame-label">Arahkan ke IMEI / barcode</span></div></div>
-            </div>
+            <p class="help-text scan-help">Kamera akan terbuka dalam popup. Anda bisa ambil gambar untuk scan barcode atau teks IMEI (OCR). Upload foto juga didukung.</p>
             <div id="scan-status" class="status" role="status" aria-live="polite"></div>
           </div>
 
@@ -251,6 +244,28 @@
       <p>&copy; <span id="year"></span> Pusat Cek IMEI. Dibuat oleh <strong>Nizar Restu Aji</strong>.</p>
     </div>
   </footer>
+
+  <div id="camera-modal" class="camera-modal" hidden aria-hidden="true">
+    <div class="camera-modal-backdrop" id="camera-backdrop"></div>
+    <div class="camera-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="camera-modal-title">
+      <div class="camera-modal-head">
+        <h3 id="camera-modal-title">Scan IMEI Kamera</h3>
+        <button type="button" id="camera-close-btn" class="btn btn-ghost camera-close" aria-label="Tutup">Tutup</button>
+      </div>
+      <div class="camera-modal-body">
+        <div id="scan-area" class="scan-area" hidden>
+          <video id="scan-video" class="scan-video" autoplay playsinline muted></video>
+          <canvas id="scan-canvas" class="scan-canvas" hidden></canvas>
+          <div class="scan-overlay"><div class="scan-frame"><span class="scan-frame-label">Arahkan ke IMEI / barcode</span></div></div>
+        </div>
+        <div id="camera-modal-status" class="status" role="status" aria-live="polite"></div>
+      </div>
+      <div class="camera-modal-actions">
+        <button type="button" id="scan-capture-btn" class="btn">Ambil Gambar &amp; Scan</button>
+        <button type="button" id="scan-stop-btn" class="btn btn-ghost">Hentikan Kamera</button>
+      </div>
+    </div>
+  </div>
 
   <script src="cek-imei.js"></script>
 </body>

@@ -201,7 +201,47 @@ input[type="text"]:focus { outline: 2px solid rgba(56,189,248,0.35); border-colo
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(0,0,0,.8);
 }
-.scan-area[hidden], .scan-canvas[hidden], #scan-stop-btn[hidden] { display: none !important; }
+.scan-area[hidden], .scan-canvas[hidden], .camera-modal[hidden] { display: none !important; }
+
+.camera-modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.camera-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(4px);
+}
+.camera-modal-dialog {
+  position: relative;
+  width: min(100%, 560px);
+  background: linear-gradient(180deg, rgba(30,41,59,.98), rgba(15,23,42,.98));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.camera-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; padding: 1rem 1rem .75rem;
+  border-bottom: 1px solid var(--border);
+}
+.camera-modal-head h3 { margin: 0; font-size: 1.1rem; }
+.camera-close { padding: .45rem .7rem; }
+.camera-modal-body { padding: 1rem; }
+.camera-modal-body .scan-area { margin-top: 0; max-height: min(60vh, 420px); }
+.camera-modal-body .scan-video, .camera-modal-body .scan-canvas { max-height: min(60vh, 420px); }
+.camera-modal-actions {
+  display: flex; gap: .5rem; flex-wrap: wrap;
+  padding: 0 1rem 1rem;
+}
+.camera-modal-actions .btn { flex: 1; min-width: 140px; }
+@media (max-width: 700px) {
+  .camera-modal { padding: .5rem; align-items: flex-end; }
+  .camera-modal-dialog { width: 100%; border-radius: 16px 16px 0 0; }
+  .camera-modal-body .scan-area, .camera-modal-body .scan-video, .camera-modal-body .scan-canvas { max-height: 55vh; }
+}
 
 .btn {
   display: inline-flex;
