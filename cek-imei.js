@@ -312,16 +312,16 @@
   }
 
   async function startCameraScan() {
+    stopScan(false);
+    openCameraModal();
     if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-      setScanStatus('Kamera butuh HTTPS/localhost. Buka situs lewat HTTPS atau gunakan Upload Gambar.', 'bad');
+      setScanStatus('Kamera butuh HTTPS/localhost. Buka situs lewat HTTPS atau gunakan Upload / Foto IMEI.', 'bad');
       return;
     }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setScanStatus('Browser tidak mendukung akses kamera. Gunakan Upload Gambar.', 'bad');
+      setScanStatus('Browser tidak mendukung akses kamera. Gunakan Upload / Foto IMEI.', 'bad');
       return;
     }
-    stopScan(false);
-    openCameraModal();
     setScanStatus('Meminta izin kamera...', 'warn');
     try {
       scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
@@ -379,7 +379,7 @@
         updateStatus();
         setScanStatus(`IMEI terdeteksi: ${imei}. Disalin otomatis.`, 'ok');
         copyText(imei).catch(() => {});
-        stopScan();
+        stopScan(true);
         return;
       }
       scanTimer = setTimeout(tick, 700);
