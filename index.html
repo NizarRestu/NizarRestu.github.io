@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pusat cek IMEI: akses cepat ke layanan cek IMEI Bea Cukai, iCloud, Vivo, OPPO, Xiaomi, dan informasi perangkat.">
+  <title>Pusat Cek IMEI</title>
+  <link rel="stylesheet" href="cek-imei.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand" aria-label="Pusat Cek IMEI">
+        <span class="brand-mark">IMEI</span>
+        <span class="brand-text">Pusat Cek</span>
+      </a>
+      <nav class="top-nav" aria-label="Navigasi">
+        <a href="#alat">Alat</a>
+        <a href="#layanan">Layanan</a>
+        <a href="#panduan">Panduan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Portal Cek IMEI</p>
+          <h1>Cek IMEI perangkat Anda dengan cepat &amp; terarah</h1>
+          <p class="lead">Kumpulkan dan akses berbagai layanan resmi maupun pihak ketiga untuk memeriksa registrasi Bea Cukai, status garansi merek, iCloud, dan informasi perangkat dari satu halaman responsif.</p>
+          <ul class="hero-points">
+            <li>Validasi format IMEI (15 digit)</li>
+            <li>Tautan langsung ke situs penyedia</li>
+            <li>Gratis, tanpa menyimpan data IMEI Anda</li>
+          </ul>
+        </div>
+
+        <div class="tool-card" id="alat">
+          <h2>Alat Bantu IMEI</h2>
+          <p class="muted">Masukkan nomor IMEI untuk memeriksa formatnya, lalu salin dan tempel di layanan tujuan.</p>
+          <label for="imei-input" class="field-label">Nomor IMEI</label>
+          <div class="input-row">
+            <input id="imei-input" type="text" inputmode="numeric" autocomplete="off" maxlength="15" placeholder="Contoh: 356938035643809" aria-describedby="imei-help imei-status">
+            <button type="button" id="copy-btn" class="btn btn-secondary">Salin</button>
+          </div>
+          <p id="imei-help" class="help-text">IMEI biasanya terdiri dari 15 digit angka. Anda dapat menemukannya di <code>*#06#</code>, pengaturan perangkat, dus, atau baki SIM.</p>
+          <div id="imei-status" class="status" role="status" aria-live="polite"></div>
+          <div class="tool-actions">
+            <button type="button" id="clear-btn" class="btn btn-ghost">Bersihkan</button>
+          </div>
+          <p class="note">Catatan: Halaman ini tidak mengirim IMEI ke server mana pun. Pemeriksaan dilakukan di situs masing-masing penyedia.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="layanan" class="section">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Layanan Cek IMEI</p>
+          <h2>Pilih layanan sesuai kebutuhan</h2>
+          <p>Setiap situs memiliki fungsi dan cakupan berbeda. Buka di tab baru, lalu masukkan IMEI Anda pada halaman penyedia.</p>
+        </div>
+
+        <div class="grid services-grid">
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-legal">Registrasi Indonesia</span>
+              <h3>Bea Cukai (Cek IMEI)</h3>
+            </div>
+            <p>Periksa apakah IMEI perangkat telah terdaftar di basis data Bea Cukai Indonesia. Penting untuk memastikan perangkat dapat menggunakan jaringan seluler di Indonesia.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Status registrasi IMEI/perangkat</li>
+              <li><strong>Penyedia:</strong> Direktorat Jenderal Bea dan Cukai</li>
+            </ul>
+            <a class="btn" href="https://old.beacukai.go.id/websitenewV2/cek-imei.html" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-icloud">iCloud / Apple</span>
+              <h3>iUnlocker - Cek iCloud</h3>
+            </div>
+            <p>Layanan pihak ketiga untuk membantu memeriksa informasi terkait status iCloud/Activation Lock berdasarkan IMEI atau nomor seri (sesuai fitur yang tersedia di situs).</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Informasi status iCloud/Find My</li>
+              <li><strong>Penyedia:</strong> Pihak ketiga (iUnlocker)</li>
+            </ul>
+            <a class="btn" href="https://iunlocker.com/id/check_icloud.php" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-brand">Resmi Merek</span>
+              <h3>Vivo Support - IMEI</h3>
+            </div>
+            <p>Halaman dukungan resmi Vivo untuk pengecekan informasi perangkat berdasarkan IMEI. Gunakan untuk verifikasi perangkat Vivo.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Informasi/dukungan perangkat Vivo</li>
+              <li><strong>Penyedia:</strong> Vivo Indonesia (resmi)</li>
+            </ul>
+            <a class="btn" href="https://www.vivo.com/id/support/IMEI" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-brand">Resmi Merek</span>
+              <h3>OPPO Support - Cek Perangkat</h3>
+            </div>
+            <p>Layanan resmi OPPO untuk memeriksa status garansi atau informasi perangkat menggunakan IMEI/nomor seri.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Garansi/status perangkat OPPO</li>
+              <li><strong>Penyedia:</strong> OPPO Indonesia (resmi)</li>
+            </ul>
+            <a class="btn" href="https://support.oppo.com/id/check/" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-brand">Resmi Merek</span>
+              <h3>Xiaomi Product Verify</h3>
+            </div>
+            <p>Halaman verifikasi produk resmi Xiaomi. Dapat digunakan untuk memeriksa keaslian/informasi produk berdasarkan IMEI (pilih tab IMEI).</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Verifikasi produk Xiaomi</li>
+              <li><strong>Penyedia:</strong> Xiaomi (resmi)</li>
+            </ul>
+            <a class="btn" href="https://www.mi.com/global/verify#/en/tab/imei" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-info">Info Perangkat</span>
+              <h3>Sickw</h3>
+            </div>
+            <p>Layanan pihak ketiga yang menyediakan berbagai pemeriksaan informasi perangkat/IMEI. Beberapa fitur mungkin berbayar atau memerlukan akun.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Informasi perangkat/IMEI</li>
+              <li><strong>Penyedia:</strong> Pihak ketiga (Sickw)</li>
+            </ul>
+            <a class="btn" href="https://sickw.com/" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-info">Info Perangkat</span>
+              <h3>IMEI.info</h3>
+            </div>
+            <p>Situs informasi IMEI untuk melihat detail model, spesifikasi dasar, dan layanan pengecekan tambahan (ketersediaan fitur dapat bervariasi).</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Informasi &amp; detail IMEI/perangkat</li>
+              <li><strong>Penyedia:</strong> Pihak ketiga (IMEI.info)</li>
+            </ul>
+            <a class="btn" href="https://www.imei.info/id/" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-info">Info Perangkat</span>
+              <h3>IMEIcheck.com</h3>
+            </div>
+            <p>Layanan pengecekan IMEI untuk melihat informasi perangkat dan laporan terkait berdasarkan nomor IMEI.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Cek IMEI &amp; informasi perangkat</li>
+              <li><strong>Penyedia:</strong> Pihak ketiga (IMEIcheck.com)</li>
+            </ul>
+            <a class="btn" href="https://imeicheck.com/id/cek-imei" target="_blank" rel="noopener noreferrer">Buka Situs</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="panduan" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Panduan Singkat</p>
+          <h2>Cara menggunakan halaman ini</h2>
+        </div>
+        <div class="grid guide-grid">
+          <article class="card guide-card">
+            <h3>1. Temukan IMEI</h3>
+            <p>Buka dialer dan ketik <code>*#06#</code>, atau cek di Pengaturan &gt; Tentang Ponsel, label dus, atau baki SIM.</p>
+          </article>
+          <article class="card guide-card">
+            <h3>2. Validasi &amp; salin</h3>
+            <p>Masukkan IMEI di alat bantu di atas untuk memastikan jumlah digit benar, lalu gunakan tombol <strong>Salin</strong>.</p>
+          </article>
+          <article class="card guide-card">
+            <h3>3. Pilih layanan</h3>
+            <p>Pilih situs sesuai kebutuhan (Bea Cukai, merek resmi, atau info umum), buka, dan tempel IMEI pada formulir penyedia.</p>
+          </article>
+        </div>
+        <div class="disclaimer card">
+          <h3>Disclaimer</h3>
+          <p>Halaman ini hanya menyediakan tautan ke layanan eksternal. Hasil pengecekan, ketersediaan, dan keakuratan data sepenuhnya bergantung pada masing-masing penyedia. Berhati-hatilah saat memasukkan IMEI di situs pihak ketiga dan hindari membagikan informasi sensitif lainnya.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Pusat Cek IMEI. Dibuat oleh <strong>Nizar Restu Aji</strong>.</p>
+    </div>
+  </footer>
+
+  <script src="cek-imei.js"></script>
+</body>
+</html>
