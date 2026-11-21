@@ -134,19 +134,35 @@
     if (scanCameraBtn) scanCameraBtn.disabled = false;
   }
 
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = Array.from(document.scripts).find((x) => x.src === src);
+      if (existing && existing.dataset.loaded === '1') return resolve();
+      const s = existing || document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      s.onload = () => { s.dataset.loaded = '1'; resolve(); };
+      s.onerror = () => reject(new Error('Gagal memuat: ' + src));
+      if (!existing) document.head.appendChild(s);
+    });
+  }
+
   async function ensureZXing() {
     if (window.ZXing) return window.ZXing;
-    if (zxingReader) return window.ZXing;
     setScanStatus('Memuat library pemindai barcode...', 'warn');
-    await new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = 'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js';
-      s.async = true;
-      s.onload = resolve;
-      s.onerror = () => reject(new Error('Gagal memuat library barcode'));
-      document.head.appendChild(s);
-    });
-    return window.ZXing;
+    const urls = [
+      'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js',
+      'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js'
+    ];
+    let lastErr;
+    for (const url of urls) {
+      try {
+        await loadScript(url);
+        if (window.ZXing) return window.ZXing;
+      } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('Gagal memuat library barcode');
   }
 
   async function scanWithBarcodeDetector(source) {
@@ -193,14 +209,16 @@
   async function scanWithOCR(source) {
     if (!window.Tesseract) {
       setScanStatus('Memuat OCR untuk membaca teks...', 'warn');
-      await new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-        s.async = true;
-        s.onload = resolve;
-        s.onerror = () => reject(new Error('Gagal memuat OCR'));
-        document.head.appendChild(s);
-      });
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+        'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js'
+      ];
+      let lastErr;
+      for (const url of urls) {
+        try { await loadScript(url); if (window.Tesseract) break; }
+        catch (e) { lastErr = e; }
+      }
+      if (!window.Tesseract) throw lastErr || new Error('Gagal memuat OCR');
     }
     const result = await window.Tesseract.recognize(source, 'eng', {
       tessedit_char_whitelist: '0123456789'
@@ -212,18 +230,23 @@
 
   async function detectFromSource(source, label) {
     setScanStatus(`Memindai ${label}...`, 'warn');
-    let imei = await scanWithBarcodeDetector(source);
+    let imei = null;
+    try { imei = await scanWithBarcodeDetector(source); } catch (_) {}
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
-    imei = await scanWithZXing(source);
+
+    try { imei = await scanWithZXing(source); }
+    catch (e) { setScanStatus(`Gagal memuat/memakai pemindai barcode: ${e && e.message ? e.message : e}. Mencoba OCR...`, 'warn'); }
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
+
     try {
       imei = await scanWithOCR(source);
       if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari teks/OCR: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
     } catch (e) {
-      setScanStatus(`Gagal OCR: ${e.message || e}`, 'bad');
+      setScanStatus(`Gagal memindai gambar: ${e && e.message ? e.message : e}. Periksa koneksi internet (library scan dimuat dari CDN) lalu coba lagi.`, 'bad');
       return false;
     }
-    setScanStatus(`Tidak ditemukan IMEI 15 digit pada ${label}. Pastikan barcode/teks jelas dan coba lagi.`, 'bad');
+
+    setScanStatus(`Tidak ditemukan IMEI 15 digit pada ${label}. Pastikan barcode/teks jelas, terang, dan fokus, lalu coba lagi.`, 'bad');
     return false;
   }
 
