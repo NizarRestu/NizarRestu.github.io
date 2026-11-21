@@ -14,9 +14,23 @@
         <span class="brand-mark">IMEI</span>
         <span class="brand-text">Pusat Cek</span>
       </a>
-      <nav class="top-nav" aria-label="Navigasi">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="top-nav" aria-label="Navigasi">
         <a href="#alat">Alat</a>
-        <a href="#layanan">Layanan</a>
+        <a href="#layanan" class="nav-layanan">Layanan IMEI</a>
+        <div class="nav-submenu">
+          <a href="https://old.beacukai.go.id/websitenewV2/cek-imei.html" target="_blank" rel="noopener noreferrer">Bea Cukai</a>
+          <a href="https://iunlocker.com/id/check_icloud.php" target="_blank" rel="noopener noreferrer">iUnlocker iCloud</a>
+          <a href="https://www.vivo.com/id/support/IMEI" target="_blank" rel="noopener noreferrer">Vivo Support</a>
+          <a href="https://support.oppo.com/id/check/" target="_blank" rel="noopener noreferrer">OPPO Support</a>
+          <a href="https://www.mi.com/global/verify#/en/tab/imei" target="_blank" rel="noopener noreferrer">Xiaomi Verify</a>
+          <a href="https://sickw.com/" target="_blank" rel="noopener noreferrer">Sickw</a>
+          <a href="https://www.imei.info/id/" target="_blank" rel="noopener noreferrer">IMEI.info</a>
+          <a href="https://imeicheck.com/id/cek-imei" target="_blank" rel="noopener noreferrer">IMEIcheck.com</a>
+          <a href="https://www.imeipro.info/" target="_blank" rel="noopener noreferrer">IMEIPro.info</a>
+        </div>
         <a href="#panduan">Panduan</a>
       </nav>
     </div>
@@ -48,20 +62,21 @@
           <div id="imei-status" class="status" role="status" aria-live="polite"></div>
 
           <div class="scan-block">
-            <p class="field-label scan-label">Scan Barcode / Teks IMEI</p>
+            <p class="field-label scan-label">Scan Barcode / Teks IMEI (seperti Google Lens)</p>
             <div class="scan-actions">
               <button type="button" id="scan-camera-btn" class="btn btn-secondary">Buka Kamera</button>
+              <button type="button" id="scan-capture-btn" class="btn btn-secondary" hidden>Ambil Foto &amp; Scan Teks</button>
               <label class="btn btn-secondary scan-file-label" id="scan-image-label">
                 Upload / Foto IMEI
                 <input id="scan-file-input" type="file" accept="image/*" class="scan-file-input">
               </label>
               <button type="button" id="scan-stop-btn" class="btn btn-ghost" hidden>Hentikan</button>
             </div>
-            <p class="help-text scan-help">Kamera butuh izin browser dan HTTPS. Di HP, tombol <strong>Upload / Foto IMEI</strong> bisa memilih foto dari galeri atau ambil foto langsung. Saat scan pertama perlu koneksi internet untuk memuat library pemindai.</p>
+            <p class="help-text scan-help">Bisa scan <strong>barcode</strong> atau <strong>teks angka IMEI</strong> langsung dari kamera/foto (OCR). Di HP, izinkan kamera saat diminta. Saat scan pertama perlu koneksi internet untuk memuat library pemindai.</p>
             <div id="scan-area" class="scan-area" hidden>
               <video id="scan-video" class="scan-video" autoplay playsinline muted></video>
               <canvas id="scan-canvas" class="scan-canvas" hidden></canvas>
-              <div class="scan-overlay"><div class="scan-frame"></div></div>
+              <div class="scan-overlay"><div class="scan-frame"><span class="scan-frame-label">Arahkan ke IMEI / barcode</span></div></div>
             </div>
             <div id="scan-status" class="status" role="status" aria-live="polite"></div>
           </div>
@@ -185,6 +200,19 @@
               <li><strong>Penyedia:</strong> Pihak ketiga (IMEIcheck.com)</li>
             </ul>
             <a class="btn" data-service="imeicheck" data-url="https://imeicheck.com/id/cek-imei" href="https://imeicheck.com/id/cek-imei" target="_blank" rel="noopener noreferrer">Salin &amp; Buka</a>
+          </article>
+
+          <article class="card service-card">
+            <div class="card-top">
+              <span class="tag tag-info">Info Perangkat</span>
+              <h3>IMEIPro.info</h3>
+            </div>
+            <p>Layanan pengecekan IMEI untuk melihat detail informasi perangkat berdasarkan nomor IMEI.</p>
+            <ul class="meta-list">
+              <li><strong>Fungsi:</strong> Cek IMEI &amp; info perangkat</li>
+              <li><strong>Penyedia:</strong> Pihak ketiga (IMEIPro.info)</li>
+            </ul>
+            <a class="btn" data-service="imeipro" data-url="https://www.imeipro.info/" href="https://www.imeipro.info/" target="_blank" rel="noopener noreferrer">Salin &amp; Buka</a>
           </article>
         </div>
       </div>

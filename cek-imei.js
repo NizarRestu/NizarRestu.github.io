@@ -5,6 +5,7 @@
   const clearBtn = document.getElementById('clear-btn');
   const year = document.getElementById('year');
   const scanCameraBtn = document.getElementById('scan-camera-btn');
+  const scanCaptureBtn = document.getElementById('scan-capture-btn');
   const scanImageBtn = document.getElementById('scan-image-btn');
   const scanStopBtn = document.getElementById('scan-stop-btn');
   const scanFileInput = document.getElementById('scan-file-input');
@@ -12,8 +13,24 @@
   const scanVideo = document.getElementById('scan-video');
   const scanCanvas = document.getElementById('scan-canvas');
   const scanStatus = document.getElementById('scan-status');
+  const menuToggle = document.getElementById('menu-toggle');
+  const siteNav = document.getElementById('site-nav');
 
   if (year) year.textContent = new Date().getFullYear();
+  if (menuToggle && siteNav) {
+    menuToggle.addEventListener('click', () => {
+      const open = siteNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
+    });
+    siteNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+      if (window.innerWidth <= 700 && siteNav.classList.contains('open')) {
+        siteNav.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Buka menu');
+      }
+    }));
+  }
   if (!input || !status) return;
 
   // Known URL patterns that accept IMEI as a query parameter.
@@ -131,6 +148,7 @@
     if (scanVideo) scanVideo.srcObject = null;
     if (scanArea) scanArea.hidden = true;
     if (scanStopBtn) scanStopBtn.hidden = true;
+    if (scanCaptureBtn) scanCaptureBtn.hidden = true;
     if (scanCameraBtn) scanCameraBtn.disabled = false;
   }
 
@@ -235,19 +253,31 @@
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
 
     try { imei = await scanWithZXing(source); }
-    catch (e) { setScanStatus(`Gagal memuat/memakai pemindai barcode: ${e && e.message ? e.message : e}. Mencoba OCR...`, 'warn'); }
+    catch (e) { setScanStatus(`Pemindai barcode gagal (${e && e.message ? e.message : e}). Mencoba baca teks/OCR...`, 'warn'); }
     if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari barcode: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
 
     try {
       imei = await scanWithOCR(source);
       if (imei) { input.value = imei; updateStatus(); setScanStatus(`IMEI terdeteksi dari teks/OCR: ${imei}`, 'ok'); copyText(imei).catch(()=>{}); return true; }
     } catch (e) {
-      setScanStatus(`Gagal memindai gambar: ${e && e.message ? e.message : e}. Periksa koneksi internet (library scan dimuat dari CDN) lalu coba lagi.`, 'bad');
+      setScanStatus(`Gagal membaca teks/OCR: ${e && e.message ? e.message : e}. Periksa koneksi internet (library scan dimuat dari CDN) lalu coba lagi.`, 'bad');
       return false;
     }
 
-    setScanStatus(`Tidak ditemukan IMEI 15 digit pada ${label}. Pastikan barcode/teks jelas, terang, dan fokus, lalu coba lagi.`, 'bad');
+    setScanStatus(`Tidak ditemukan IMEI 15 digit pada ${label}. Pastikan teks/barcode IMEI jelas, terang, dan fokus.`, 'bad');
     return false;
+  }
+
+  async function captureAndScan() {
+    if (!scanVideo || scanVideo.readyState < 2) {
+      setScanStatus('Kamera belum siap. Tunggu sebentar lalu coba lagi.', 'warn');
+      return;
+    }
+    scanCanvas.width = scanVideo.videoWidth || 1280;
+    scanCanvas.height = scanVideo.videoHeight || 720;
+    const ctx = scanCanvas.getContext('2d');
+    ctx.drawImage(scanVideo, 0, 0, scanCanvas.width, scanCanvas.height);
+    await detectFromSource(scanCanvas, 'foto kamera (teks/barcode)');
   }
 
   async function startCameraScan() {
@@ -282,11 +312,12 @@
     }
     scanArea.hidden = false;
     scanStopBtn.hidden = false;
+    if (scanCaptureBtn) scanCaptureBtn.hidden = false;
     scanCameraBtn.disabled = true;
     scanVideo.srcObject = scanStream;
     try { await scanVideo.play(); } catch (_) {}
     scanning = true;
-    setScanStatus('Kamera aktif. Arahkan barcode/teks IMEI ke kotak...', 'warn');
+    setScanStatus('Kamera aktif. Arahkan ke barcode/teks IMEI, atau tekan "Ambil Foto & Scan Teks" untuk OCR seperti Google Lens.', 'warn');
 
     const tick = async () => {
       if (!scanning) return;
@@ -349,6 +380,9 @@
 
   if (scanCameraBtn) {
     scanCameraBtn.addEventListener('click', (e) => { e.preventDefault(); startCameraScan(); });
+  }
+  if (scanCaptureBtn) {
+    scanCaptureBtn.addEventListener('click', (e) => { e.preventDefault(); captureAndScan(); });
   }
   if (scanStopBtn) {
     scanStopBtn.addEventListener('click', (e) => { e.preventDefault(); stopScan(); setScanStatus('Pemindaian kamera dihentikan.', 'warn'); });
