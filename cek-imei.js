@@ -115,6 +115,8 @@
   function openCameraModal() {
     if (!cameraModal) return;
     cameraModal.hidden = false;
+    cameraModal.removeAttribute('hidden');
+    cameraModal.style.display = 'flex';
     cameraModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -122,6 +124,8 @@
   function closeCameraModal() {
     if (!cameraModal) return;
     cameraModal.hidden = true;
+    cameraModal.setAttribute('hidden', '');
+    cameraModal.style.display = 'none';
     cameraModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
@@ -409,10 +413,23 @@
   }
 
   if (scanCameraBtn) {
-    scanCameraBtn.addEventListener('click', (e) => { e.preventDefault(); startCameraScan(); });
+    scanCameraBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      startCameraScan().catch((err) => {
+        console.error('Camera scan error', err);
+        openCameraModal();
+        setScanStatus(`Gagal membuka kamera: ${err && err.message ? err.message : err}`, 'bad');
+      });
+    });
   }
   if (scanCaptureBtn) {
-    scanCaptureBtn.addEventListener('click', (e) => { e.preventDefault(); captureAndScan(); });
+    scanCaptureBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      captureAndScan().catch((err) => {
+        console.error('Capture scan error', err);
+        setScanStatus(`Gagal scan gambar: ${err && err.message ? err.message : err}`, 'bad');
+      });
+    });
   }
   if (scanStopBtn) {
     scanStopBtn.addEventListener('click', (e) => { e.preventDefault(); stopScan(true); setScanStatus('Kamera ditutup.', 'warn'); });
