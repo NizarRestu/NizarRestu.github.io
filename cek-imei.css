@@ -125,7 +125,15 @@ input[type="text"]:focus { outline: 2px solid rgba(56,189,248,0.35); border-colo
 .scan-label { margin: 0 0 .5rem; }
 .scan-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .scan-actions .btn, .scan-file-label { padding: .55rem .85rem; font-size: .92rem; }
-.scan-file-label { margin: 0; }
+.scan-file-label { margin: 0; position: relative; overflow: hidden; }
+.scan-file-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
 .scan-help { margin-top: .5rem; font-size: .85rem; }
 .visually-hidden {
   position: absolute !important;
