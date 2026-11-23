@@ -40,7 +40,7 @@
       <div class="container hero-grid">
         <div class="hero-copy">
           <h1>Cek IMEI</h1>
-          <p class="lead">Masukkan IMEI, salin, lalu buka layanan.</p>
+          <p class="lead">Satu halaman sederhana untuk cek registrasi Bea Cukai, garansi merek, iCloud, dan informasi perangkat. Masukkan IMEI, lalu pilih layanan.</p>
         </div>
 
         <div class="tool-card" id="alat">
@@ -49,7 +49,7 @@
             <input id="imei-input" type="text" inputmode="numeric" autocomplete="off" maxlength="15" placeholder="356938035643809" aria-describedby="imei-help imei-status">
             <button type="button" id="copy-btn" class="btn btn-secondary">Salin</button>
           </div>
-          <p id="imei-help" class="help-text">15 digit &middot; cek <code>*#06#</code> di ponsel</p>
+          <p id="imei-help" class="help-text">IMEI terdiri dari 15 digit. Temukan lewat <code>*#06#</code>, pengaturan perangkat, dus, atau baki SIM.</p>
           <div id="imei-status" class="status" role="status" aria-live="polite"></div>
 
           <div class="scan-block">
@@ -61,8 +61,10 @@
                 <input id="scan-file-input" type="file" accept="image/*" class="scan-file-input">
               </label>
             </div>
+            <p class="help-text scan-help">Kamera terbuka dalam popup. Tekan <strong>Ambil Gambar &amp; Scan</strong> untuk membaca barcode atau teks IMEI; foto dari galeri juga didukung. Scan pertama memerlukan internet untuk memuat OCR.</p>
             <div id="scan-status" class="status" role="status" aria-live="polite"></div>
           </div>
+          <p class="note">Karena kebijakan browser, hasil cek tidak bisa ditampilkan langsung di sini. IMEI disalin otomatis saat Anda membuka layanan; tempelkan jika kolom situs tujuan belum terisi.</p>
           <button type="button" id="clear-btn" class="btn btn-ghost clear-btn">Bersihkan</button>
         </div>
       </div>
@@ -71,16 +73,28 @@
     <section id="layanan" class="section">
       <div class="container">
         <h2>Layanan</h2>
+        <p class="section-desc">Pilih layanan sesuai kebutuhan. IMEI akan disalin otomatis dan situs penyedia terbuka di tab baru.</p>
         <div class="grid services-grid">
-          <article class="card service-card"><h3>Bea Cukai</h3><a class="btn" data-service="beacukai" data-url="https://old.beacukai.go.id/websitenewV2/cek-imei.html" href="https://old.beacukai.go.id/websitenewV2/cek-imei.html" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>iUnlocker iCloud</h3><a class="btn" data-service="iunlocker" data-url="https://iunlocker.com/id/check_icloud.php" href="https://iunlocker.com/id/check_icloud.php" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>Vivo Support</h3><a class="btn" data-service="vivo" data-url="https://www.vivo.com/id/support/IMEI" href="https://www.vivo.com/id/support/IMEI" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>OPPO Support</h3><a class="btn" data-service="oppo" data-url="https://support.oppo.com/id/check/" href="https://support.oppo.com/id/check/" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>Xiaomi Verify</h3><a class="btn" data-service="xiaomi" data-url="https://www.mi.com/global/verify#/en/tab/imei" href="https://www.mi.com/global/verify#/en/tab/imei" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>Sickw</h3><a class="btn" data-service="sickw" data-url="https://sickw.com/" href="https://sickw.com/" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>IMEI.info</h3><a class="btn" data-service="imeiinfo" data-url="https://www.imei.info/id/" href="https://www.imei.info/id/" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>IMEIcheck.com</h3><a class="btn" data-service="imeicheck" data-url="https://imeicheck.com/id/cek-imei" href="https://imeicheck.com/id/cek-imei" target="_blank" rel="noopener noreferrer">Buka</a></article>
-          <article class="card service-card"><h3>IMEIPro.info</h3><a class="btn" data-service="imeipro" data-url="https://www.imeipro.info/" href="https://www.imeipro.info/" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>Bea Cukai</h3><p>Status registrasi IMEI Indonesia.</p></div><a class="btn" data-service="beacukai" data-url="https://old.beacukai.go.id/websitenewV2/cek-imei.html" href="https://old.beacukai.go.id/websitenewV2/cek-imei.html" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>iUnlocker iCloud</h3><p>Cek status iCloud / Activation Lock.</p></div><a class="btn" data-service="iunlocker" data-url="https://iunlocker.com/id/check_icloud.php" href="https://iunlocker.com/id/check_icloud.php" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>Vivo Support</h3><p>Verifikasi perangkat Vivo.</p></div><a class="btn" data-service="vivo" data-url="https://www.vivo.com/id/support/IMEI" href="https://www.vivo.com/id/support/IMEI" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>OPPO Support</h3><p>Cek garansi perangkat OPPO.</p></div><a class="btn" data-service="oppo" data-url="https://support.oppo.com/id/check/" href="https://support.oppo.com/id/check/" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>Xiaomi Verify</h3><p>Verifikasi produk Xiaomi (tab IMEI).</p></div><a class="btn" data-service="xiaomi" data-url="https://www.mi.com/global/verify#/en/tab/imei" href="https://www.mi.com/global/verify#/en/tab/imei" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>Sickw</h3><p>Informasi perangkat &amp; IMEI.</p></div><a class="btn" data-service="sickw" data-url="https://sickw.com/" href="https://sickw.com/" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>IMEI.info</h3><p>Detail model &amp; spesifikasi perangkat.</p></div><a class="btn" data-service="imeiinfo" data-url="https://www.imei.info/id/" href="https://www.imei.info/id/" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>IMEIcheck.com</h3><p>Laporan informasi perangkat.</p></div><a class="btn" data-service="imeicheck" data-url="https://imeicheck.com/id/cek-imei" href="https://imeicheck.com/id/cek-imei" target="_blank" rel="noopener noreferrer">Buka</a></article>
+          <article class="card service-card"><div><h3>IMEIPro.info</h3><p>Detail informasi perangkat.</p></div><a class="btn" data-service="imeipro" data-url="https://www.imeipro.info/" href="https://www.imeipro.info/" target="_blank" rel="noopener noreferrer">Buka</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <h2>Cara pakai</h2>
+        <div class="steps">
+          <p><strong>1.</strong> Ketik IMEI 15 digit atau scan dari kamera/foto.</p>
+          <p><strong>2.</strong> Periksa status validasi di bawah kolom input.</p>
+          <p><strong>3.</strong> Klik <strong>Buka</strong> pada layanan; IMEI tersalin otomatis.</p>
         </div>
       </div>
     </section>
@@ -88,7 +102,7 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>Cek IMEI &middot; Nizar Restu Aji &middot; hasil cek bergantung penyedia layanan.</p>
+      <p>&copy; Cek IMEI &middot; Nizar Restu Aji. Hanya menyediakan tautan ke layanan eksternal; hasil dan keakuratan data bergantung pada masing-masing penyedia.</p>
     </div>
   </footer>
 
